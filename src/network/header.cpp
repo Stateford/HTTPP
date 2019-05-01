@@ -1,0 +1,40 @@
+#include "header.h"
+
+namespace Network {
+
+    Header::Header() {
+        _setDefault();
+    }
+
+    Header::Header(const std::string& hostname) {
+        _headers["Host"] = hostname;
+        _setDefault();
+    }
+    
+    void Header::_setDefault() {
+        _headers["Connection"] = "Close";
+    }
+
+    void Header::setContentType(ContentType type) {
+        switch(type) {
+            case PLAIN:
+                _headers["Content-Type"] = "text/plain";
+                break;
+            case CSV:
+                _headers["Content-Type"] = "text/csv";
+                break;
+            case HTML:
+                _headers["Content-Type"] = "text/html";
+                break;
+            case JSON:
+                _headers["Content-Type"] = "text/json";
+                break;
+            default:
+                break;
+        }
+    }
+
+    std::string& Header::operator[](const std::string& key) {
+        return _headers[key];
+    }
+}
