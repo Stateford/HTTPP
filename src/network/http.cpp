@@ -10,6 +10,7 @@ extern "C" {
 namespace Network {
 
     void Http::request() {
+        _socket->connectSocket();
         std::string responseBuffer;
         responseBuffer.reserve(10'000);
 

@@ -12,17 +12,26 @@ namespace Network {
     class Socket
     {
         private:
-            static unsigned int _refrenceCount;
             int _sock;
+            bool _isOpen = false;
             addrinfo _hints;
             addrinfo* _result;
+
+            std::string hostname;
+            std::string port;
+
         public:
             Socket(const std::string&, const std::string&);
-            Socket(const Socket&);
+            Socket(const Socket&);  // copy constructor
+            Socket(Socket&&); // move constructor
 
-            Socket& operator=(const Socket&);
+            Socket& operator=(const Socket&);   // copy assignment
+            Socket& operator=(Socket&&); // move assignment
             ~Socket() noexcept;
 
+            void connectSocket();
+
+            bool isOpen() { return _isOpen; }
             int getSocket() { return _sock; }
     };
 }

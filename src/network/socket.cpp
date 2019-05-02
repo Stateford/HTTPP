@@ -3,14 +3,63 @@
 
 namespace Network {
 
-    unsigned int Socket::_refrenceCount = 0;
-
     Socket::Socket(const std::string &hostname, const std::string &port) {
-        _refrenceCount++;
         _hints.ai_family = AF_INET;
         _hints.ai_socktype = SOCK_STREAM;
         _hints.ai_protocol = IPPROTO_TCP;
-        
+        this->hostname = hostname;
+        this->port = port;
+    }
+
+    // copy constructor
+    Socket::Socket(const Socket& other) {
+        this->_sock = other._sock;
+        this->_hints = other._hints;
+        this->_result = new addrinfo;
+        *this->_result = *other._result;
+    }
+
+    // move constructor
+    Socket::Socket(Socket&& other) {
+        this->_sock = other._sock;
+        this->_hints = other._hints;
+        this->_result = other._result;
+        other._result = nullptr;
+    }
+
+    // copy assignment
+    Socket& Socket::operator=(const Socket& other) {
+        if(&other == this)
+            return *this;
+
+        this->_sock = other._sock;
+        this->_hints = other._hints;
+
+        if(this->_result != nullptr)
+            freeaddrinfo(this->_result);
+        this->_result = new addrinfo;
+        *this->_result = *other._result;
+
+        return *this;
+    }
+
+    // move assignment
+    Socket& Socket::operator=(Socket&& other) {
+        if(&other == this)
+            return *this;
+
+        if(this->_result != nullptr)
+            freeaddrinfo(this->_result);
+
+        this->_sock = other._sock;
+        this->_hints = other._hints;
+        this->_result = other._result;
+        other._result = nullptr;
+
+        return *this;
+    }
+
+    void Socket::connectSocket() {
         int result = getaddrinfo(hostname.c_str(), port.c_str(), &_hints, &_result);
         if(result == -1)
             throw NetworkError("Couldn't resolve DNS");
@@ -28,33 +77,13 @@ namespace Network {
 
         }
         freeaddrinfo(ptr);
-    }
-
-    Socket::Socket(const Socket& other) {
-        _refrenceCount++;
-        this->_sock = other._sock;
-        this->_hints = other._hints;
-        this->_result = other._result;
-    }
-
-    Socket& Socket::operator=(const Socket& other)
-    {
-        if(&other == this)
-            return *this;
-
-        this->_sock = other._sock;
-        this->_hints = other._hints;
-        this->_result = other._result;
-
-        return *this;
+        _isOpen = true;
     }
 
     Socket::~Socket() noexcept {
-        _refrenceCount--;
-        if(_refrenceCount == 0)
-        {
+        if(_isOpen && _result != nullptr)
             close(_sock);
+        else if(_result != nullptr)
             freeaddrinfo(_result);
-        }
     }
 }
