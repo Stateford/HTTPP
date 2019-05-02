@@ -9,7 +9,30 @@ namespace Network {
         _headers["Host"] = _url->getHost();
     }
 
+    // move constructor
+    Request::Request(Request&& other) {
+        _socket = std::make_unique<Socket>(std::move(other._socket));
+        _url = std::make_unique<URL>(std::move(other._url));
+        _headers["Host"] = _url->getHost();
+        _method = other._method;
+        _response = other._response;
+    }
+
     Request::~Request() {};
+
+    // move assignment
+    Request& Request::operator=(Request&& other) {
+        if(&other == this)
+            return *this;
+
+        _socket = std::make_unique<Socket>(std::move(other._socket));
+        _url = std::make_unique<URL>(std::move(other._socket));
+        _headers["Host"] = _url->getHost();
+        _method = other._method;
+        _response = other._response;
+
+        return *this;
+    }
 
     const std::string Request::createPacket() const {
         std::string temp;

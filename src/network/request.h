@@ -25,6 +25,12 @@ namespace Network {
             virtual const std::string createPacket() const;
         public:
             Request(const std::string&);
+            Request(const Request&) = delete; // copy constructor
+            Request(Request&&); // move constructor
+
+            Request& operator=(const Request&) = delete; // copy assignment
+            Request& operator=(Request&&); // move assignment
+
             virtual ~Request() = 0;
             virtual void request() = 0;
             const Response getResponse() const { return _response; };
