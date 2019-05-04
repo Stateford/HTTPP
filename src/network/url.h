@@ -14,8 +14,11 @@ namespace Network {
             Protocol _protocol = HTTP;
         public:
             URL(const std::string&);
-            URL(const URL&) = default; // copy constructor
-            URL(URL&&) = default; // move constructor
+            URL(const URL&); // copy constructor
+            URL& operator=(const URL&); // copy assignment
+
+            URL(URL&&); // move constructor
+            URL& operator=(URL&&); // move assignment
 
             const std::string getHost() const { return _hostname; };
             const std::string getPath() const { return _path; };

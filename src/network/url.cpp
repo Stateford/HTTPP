@@ -33,4 +33,38 @@ namespace Network {
         std::cout << _hostname << std::endl;
         std::cout << _path << std::endl;
     }
+
+    URL::URL(const URL& other) {
+        _hostname = other._hostname;
+        _path = other._path;
+        _protocol = other._protocol;
+    }
+
+    URL& URL::operator=(const URL& other) {
+        if(&other == this)
+            return *this;
+
+        _hostname = other._hostname;
+        _path = other._path;
+        _protocol = other._protocol;
+
+        return *this;
+    }
+
+    URL::URL(URL&& other) {
+        _hostname = other._hostname;
+        _path = other._path;
+        _protocol = other._protocol;
+    }
+
+    URL& URL::operator=(URL&& other) {
+        if(&other == this)
+            return *this;
+
+        _hostname = other._hostname;
+        _path = other._path;
+        _protocol = other._protocol;
+
+        return *this;
+    }
 }

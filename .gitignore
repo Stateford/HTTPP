@@ -1,1 +1,3 @@
 *.json
+*.out
+.gdb_history

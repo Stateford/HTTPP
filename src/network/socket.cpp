@@ -1,6 +1,7 @@
 #include "socket.h"
 #include "errors.h"
 
+
 namespace Network {
 
     Socket::Socket(const std::string &hostname, const std::string &port) {
@@ -17,6 +18,9 @@ namespace Network {
         this->_hints = other._hints;
         this->_result = new addrinfo;
         *this->_result = *other._result;
+
+        this->hostname = other.hostname;
+        this->port = other.port;
     }
 
     // move constructor
@@ -25,6 +29,9 @@ namespace Network {
         this->_hints = other._hints;
         this->_result = other._result;
         other._result = nullptr;
+
+        this->hostname = other.hostname;
+        this->port = other.port;
     }
 
     // copy assignment
@@ -40,11 +47,15 @@ namespace Network {
         this->_result = new addrinfo;
         *this->_result = *other._result;
 
+        this->hostname = other.hostname;
+        this->port = other.port;
+
         return *this;
     }
 
     // move assignment
     Socket& Socket::operator=(Socket&& other) {
+        std::cout << "move assignment" << std::endl;
         if(&other == this)
             return *this;
 
@@ -55,6 +66,9 @@ namespace Network {
         this->_hints = other._hints;
         this->_result = other._result;
         other._result = nullptr;
+
+        this->hostname = other.hostname;
+        this->port = other.port;
 
         return *this;
     }

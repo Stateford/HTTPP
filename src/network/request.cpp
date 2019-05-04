@@ -11,8 +11,8 @@ namespace Network {
 
     // move constructor
     Request::Request(Request&& other) {
-        _socket = std::make_unique<Socket>(std::move(other._socket));
-        _url = std::make_unique<URL>(std::move(other._url));
+        _socket = std::move(other._socket);
+        _url = std::move(other._url);
         _headers["Host"] = _url->getHost();
         _method = other._method;
         _response = other._response;
@@ -25,8 +25,8 @@ namespace Network {
         if(&other == this)
             return *this;
 
-        _socket = std::make_unique<Socket>(std::move(other._socket));
-        _url = std::make_unique<URL>(std::move(other._socket));
+        _socket = std::move(other._socket);
+        _url = std::move(other._url);
         _headers["Host"] = _url->getHost();
         _method = other._method;
         _response = other._response;
