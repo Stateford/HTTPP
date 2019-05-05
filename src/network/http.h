@@ -1,4 +1,10 @@
 #pragma once
+#include "socket.h"
+#include "header.h"
+#include "url.h"
+#include "response.h"
+#include "request.h"
+
 #include <iostream>
 #include <vector>
 #include <string>
@@ -6,11 +12,6 @@
 #include <string.h>
 #include <unistd.h>
 #include <netdb.h>
-#include "socket.h"
-#include "header.h"
-#include "url.h"
-#include "response.h"
-#include "request.h"
 
 namespace Network {
 
@@ -22,5 +23,4 @@ namespace Network {
 
             void request() override;
     };
-
 }

@@ -15,7 +15,7 @@ namespace Network {
         _headers["Connection"] = "Close";
     }
 
-    void Header::setContentType(ContentType type) {
+    void Header::setContentType(MimeType type) {
         switch(type) {
             case PLAIN:
                 _headers["Content-Type"] = "text/plain";
@@ -36,5 +36,9 @@ namespace Network {
 
     std::string& Header::operator[](const std::string& key) {
         return _headers[key];
+    }
+
+    void Header::insert(const std::string& key, const std::string& value) {
+        _headers[key] = value;
     }
 }

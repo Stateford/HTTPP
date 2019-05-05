@@ -15,7 +15,6 @@ namespace Network {
         responseBuffer.reserve(10'000);
 
         const std::string httpPacket = createPacket();
-        std::cout << _socket->getSocket() << std::endl;
         int status = send(_socket->getSocket(), httpPacket.c_str(), httpPacket.size(), 0);
 
         if(status == -1)

@@ -55,7 +55,6 @@ namespace Network {
 
     // move assignment
     Socket& Socket::operator=(Socket&& other) {
-        std::cout << "move assignment" << std::endl;
         if(&other == this)
             return *this;
 
@@ -82,22 +81,19 @@ namespace Network {
         for(ptr = _result; ptr != NULL; ptr = ptr->ai_next)
         {
             _sock = socket(ptr->ai_family, ptr->ai_socktype, ptr->ai_protocol);
-            std::cout << _sock << std::endl;
-
-            std::cout << "Sock status: " << _sock << std::endl;
-
-            int status = connect(_sock, ptr->ai_addr, (int)ptr->ai_addrlen);
-            std::cout << "connect status: " << status << std::endl;
-
+            connect(_sock, ptr->ai_addr, (int)ptr->ai_addrlen);
         }
         freeaddrinfo(ptr);
         _isOpen = true;
     }
 
     Socket::~Socket() noexcept {
-        if(_isOpen && _result != nullptr)
+        try {
+            if(_result != nullptr)
+                freeaddrinfo(_result);
             close(_sock);
-        else if(_result != nullptr)
-            freeaddrinfo(_result);
+        } catch(std::exception e) {
+            std::cout << "failed to close socket:\n" << e.what() << std::endl;
+        }
     }
 }

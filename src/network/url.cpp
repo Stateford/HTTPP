@@ -30,8 +30,6 @@ namespace Network {
             _hostname = url.substr(protocolPosition);
             _path = "/";
         }
-        std::cout << _hostname << std::endl;
-        std::cout << _path << std::endl;
     }
 
     URL::URL(const URL& other) {

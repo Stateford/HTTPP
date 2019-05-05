@@ -3,7 +3,7 @@
 #include <string>
 
 namespace Network {
-    enum ContentType {
+    enum MimeType {
         PLAIN,
         CSV,
         HTML,
@@ -17,15 +17,15 @@ namespace Network {
         private:
             std::map<std::string, std::string> _headers;
             void _setDefault();
+
         public:
             Header();
             Header(const std::string&);
-
-            void setContentType(ContentType);
-
             std::string& operator[](const std::string&);
 
+            void setContentType(MimeType);
             bool isEmpty() const { return _headers.empty(); }
+            inline void insert(const std::string&, const std::string&);
 
             header_iterator begin() { return _headers.begin(); }
             header_iterator end() { return _headers.end(); }

@@ -10,8 +10,8 @@ namespace Network {
 
     class Request {
         protected:
-            std::unique_ptr<Socket> _socket;
-            std::unique_ptr<URL> _url;
+            std::shared_ptr<Socket> _socket;
+            std::shared_ptr<URL> _url;
             enum Method {
                 GET,
                 POST,
@@ -23,12 +23,13 @@ namespace Network {
             Method _method;
 
             virtual const std::string createPacket() const;
+
         public:
             Request(const std::string&);
-            //Request(const Request&) = delete; // copy constructor
+            Request(const Request&); // copy constructor
             Request(Request&&); // move constructor
 
-            //Request& operator=(const Request&) = delete; // copy assignment
+            Request& operator=(const Request&); // copy assignment
             Request& operator=(Request&&); // move assignment
 
             virtual ~Request() = 0;

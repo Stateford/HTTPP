@@ -5,6 +5,7 @@
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <netdb.h>
+#include <memory>
 
 
 namespace Network {
@@ -30,6 +31,7 @@ namespace Network {
             ~Socket() noexcept;
 
             void connectSocket();
+            static void closeSocket(Socket*);
 
             bool isOpen() { return _isOpen; }
             int getSocket() { return _sock; }
