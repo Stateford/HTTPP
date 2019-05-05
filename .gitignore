@@ -6,3 +6,5 @@
 # build folders
 release/
 debug/
+
+*.retry
