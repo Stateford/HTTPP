@@ -1,10 +1,10 @@
 #pragma once
-#include <string>
-#include <memory>
 #include "url.h"
 #include "socket.h"
 #include "header.h"
 #include "response.h"
+#include <string>
+#include <memory>
 
 namespace Network {
 
@@ -16,13 +16,19 @@ namespace Network {
                 GET,
                 POST,
                 PUT,
-                DELETE
+                DELETE,
+                HEAD,
+                CONNECT,
+                OPTIONS,
+                TRACE,
+                PATCH
             };
             Header _headers;
             Response _response;
             Method _method;
+            std::string _body;
 
-            virtual const std::string createPacket() const;
+            virtual const std::string createPacket();
 
         public:
             Request(const std::string&);
@@ -34,6 +40,9 @@ namespace Network {
 
             virtual ~Request() = 0;
             virtual void request() = 0;
+
+            void setBody(const std::string&);
+
             const Response getResponse() const { return _response; };
     };
 }

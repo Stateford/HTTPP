@@ -17,6 +17,7 @@ namespace Network {
         this->_headers = other._headers;
         this->_method = other._method;
         this->_response = other._response;
+        this->_body = other._body;
     }
 
     // move constructor
@@ -26,6 +27,7 @@ namespace Network {
         this->_headers = other._headers;
         this->_method = other._method;
         this->_response = other._response;
+        this->_body = other._body;
     }
 
     Request::~Request() {};
@@ -39,6 +41,7 @@ namespace Network {
         this->_headers = other._headers;
         this->_method = other._method;
         this->_response = other._response;
+        this->_body = other._body;
 
         return *this;
     }
@@ -53,11 +56,16 @@ namespace Network {
         this->_headers = other._headers;
         this->_method = other._method;
         this->_response = other._response;
+        this->_body = other._body;
 
         return *this;
     }
 
-    const std::string Request::createPacket() const {
+    void Request::setBody(const std::string& body) {
+        _body = body;
+    }
+
+    const std::string Request::createPacket(){ 
         std::string temp;
         temp.reserve(400);
 
@@ -68,17 +76,46 @@ namespace Network {
             case POST:
                 temp += "POST";
                 break;
+            case PUT:
+                temp += "PUT";
+                break;
+            case DELETE:
+                temp += "DELETE";
+                break;
+            case HEAD:
+                temp += "HEAD";
+                break;
+            case CONNECT:
+                temp += "CONNECT";
+                break;
+            case OPTIONS:
+                temp += "OPTIONS";
+                break;
+            case TRACE:
+                temp += "TRACE";
+                break;
+            case PATCH:
+                temp += "PATCH";
+                break;
             default:
                 break;
         }
 
         temp += " " + _url->getPath() + " HTTP/1.1\r\n";
 
+        if(!_body.empty() && _method != GET) {
+            _headers["Content-Length"] = std::to_string(_body.size());
+        }
+
         if(!_headers.isEmpty()) {
             for(const auto& p : _headers)
                 temp += p.first + ": " + p.second + "\r\n";
         }
+
         temp += "\r\n\r\n";
+
+        if(!_body.empty() && _method != GET)
+            temp += _body + "\r\n\r\n";
 
         return temp;
     }

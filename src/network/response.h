@@ -2,14 +2,16 @@
 #include <string>
 #include "header.h"
 
+
 namespace Network {
-    
+
     class Response {
         private:
             Header _headers;
             std::string _content;
             unsigned short _status = 0;
             std::string _httpVersion;
+
         public:
             Response() = default;
             Response(const std::string&);

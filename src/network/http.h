@@ -4,7 +4,6 @@
 #include "url.h"
 #include "response.h"
 #include "request.h"
-
 #include <iostream>
 #include <vector>
 #include <string>
@@ -15,11 +14,10 @@
 
 namespace Network {
 
-    class Http : public Request
-    {
+    class Http : public Request {
         public:
             Http(const std::string& url) : Request(url) {};
-            ~Http() {};
+            ~Http() = default;
 
             void request() override;
     };
