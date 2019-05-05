@@ -28,7 +28,8 @@ namespace Network {
             Method _method;
             std::string _body;
 
-            virtual const std::string createPacket();
+            const std::string createPacket();
+            const std::string getMethod() const;
 
         public:
             Request(const std::string&);

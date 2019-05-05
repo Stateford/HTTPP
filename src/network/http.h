@@ -17,6 +17,7 @@ namespace Network {
     class Http : public Request {
         public:
             Http(const std::string& url) : Request(url) {};
+
             ~Http() = default;
 
             void request() override;

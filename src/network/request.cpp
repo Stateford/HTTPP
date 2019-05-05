@@ -65,41 +65,37 @@ namespace Network {
         _body = body;
     }
 
-    const std::string Request::createPacket(){ 
-        std::string temp;
-        temp.reserve(400);
+    const std::string Request::getMethod() const {
 
         switch(_method) {
             case GET:
-                temp += "GET";
-                break;
+                return "GET";
             case POST:
-                temp += "POST";
-                break;
+                return "POST";
             case PUT:
-                temp += "PUT";
-                break;
+                return "PUT";
             case DELETE:
-                temp += "DELETE";
-                break;
+                return "DELETE";
             case HEAD:
-                temp += "HEAD";
-                break;
+                return "HEAD";
             case CONNECT:
-                temp += "CONNECT";
-                break;
+                return "CONNECT";
             case OPTIONS:
-                temp += "OPTIONS";
-                break;
+                return "OPTIONS";
             case TRACE:
-                temp += "TRACE";
-                break;
+                return "TRACE";
             case PATCH:
-                temp += "PATCH";
-                break;
+                return "PATCH";
             default:
-                break;
+               break; 
         }
+    }
+
+    const std::string Request::createPacket() { 
+        std::string temp;
+        temp.reserve(400);
+
+        temp += getMethod();
 
         temp += " " + _url->getPath() + " HTTP/1.1\r\n";
 
