@@ -2,3 +2,7 @@
 *.out
 .gdb_history
 *.swp
+
+# build folders
+release/
+debug/

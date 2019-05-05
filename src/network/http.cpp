@@ -36,7 +36,6 @@ namespace Network {
                 break;
             else
                 throw NetworkError("error: " + std::to_string(errno));
-
         } while(result > 0);
         _response.parseResponse(responseBuffer);
     }

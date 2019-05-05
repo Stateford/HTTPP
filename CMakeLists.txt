@@ -1,0 +1,15 @@
+cmake_minimum_required(VERSION 3.6)
+
+project(HTTPP)
+
+# Versions
+set (HTTPP_VERSION_MAJOR 0)
+set (HTTPP_VERSION_MINOR 0)
+set (HTTPP_VERSION_PATCH 1)
+
+set (HTTPP_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR})
+set (HTTPP_BINARY_DIR ${CMAKE_CURRENT_BINARY_DIR})
+
+set( CMAKE_EXPORT_COMPILE_COMMANDS ON )
+
+add_subdirectory(src)

@@ -25,7 +25,7 @@ namespace Network {
 
             void setContentType(MimeType);
             bool isEmpty() const { return _headers.empty(); }
-            inline void insert(const std::string&, const std::string&);
+            void insert(const std::string&, const std::string&);
 
             header_iterator begin() { return _headers.begin(); }
             header_iterator end() { return _headers.end(); }
