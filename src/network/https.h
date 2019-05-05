@@ -9,15 +9,9 @@
 
 namespace Network {
 
-    // deleters
-    void ctx_deleter(SSL_CTX*);
-    void bio_deleter(BIO*);
 
     class Https : public Request {
         private:
-            //std::unique_ptr<SSL_CTX, decltype(ctx_deleter)> _ctx;
-            //std::unique_ptr<SSL> _ssl;
-            //std::unique_ptr<BIO, decltype(bio_deleter)> _bio;
             SSL_CTX* _ctx;
             SSL* _ssl;
             BIO* _bio;

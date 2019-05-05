@@ -5,29 +5,15 @@
 
 namespace Network {
 
-    void ctx_deleter(SSL_CTX* ctx) {
-
-    }
-
-    void bio_deleter(BIO* bio) {
-        BIO_free_all(bio);
-    }
-    
     void Https::request() {
-        //_bio = std::make_unique<BIO, decltype(bio_deleter)>(BIO_new_ssl_connect(_ctx), bio_deleter);
 
         _bio = BIO_new_ssl_connect(_ctx);
-
-        //BIO_get_ssl(_bio.get(), _ssl.get());
-        //SSL_set_mode(_ssl.get(), SSL_MODE_AUTO_RETRY);
 
         BIO_get_ssl(_bio, &_ssl);
         SSL_set_mode(_ssl, SSL_MODE_AUTO_RETRY);
 
         const std::string hostname = _url->getHost() + ":443";
         std::cout << hostname << std::endl;
-
-        //BIO_set_conn_hostname(_bio.get(), hostname.c_str());
 
         BIO_set_conn_hostname(_bio, hostname.c_str());
 

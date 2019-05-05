@@ -1,4 +1,5 @@
 #include "request.h"
+#include "errors.h"
 
 
 namespace Network {
@@ -66,7 +67,6 @@ namespace Network {
     }
 
     const std::string Request::getMethod() const {
-
         switch(_method) {
             case GET:
                 return "GET";
@@ -87,7 +87,7 @@ namespace Network {
             case PATCH:
                 return "PATCH";
             default:
-               break; 
+                throw NetworkError("Invalid Method");
         }
     }
 
