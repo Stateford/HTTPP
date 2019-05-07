@@ -10,11 +10,9 @@
 
 namespace Network {
 
-    class Socket
-    {
+    class Socket {
         private:
             int _sock;
-            bool _isOpen = false;
             addrinfo _hints;
             addrinfo* _result;
 
@@ -33,7 +31,8 @@ namespace Network {
             void connectSocket();
             static void closeSocket(Socket*);
 
-            bool isOpen() { return _isOpen; }
             int getSocket() { return _sock; }
+            void send(const std::string&);
+            std::string recv() const;
     };
 }

@@ -1,5 +1,6 @@
 #include "socket.h"
 #include "errors.h"
+#include <vector>
 
 
 namespace Network {
@@ -84,7 +85,6 @@ namespace Network {
             connect(_sock, ptr->ai_addr, (int)ptr->ai_addrlen);
         }
         freeaddrinfo(ptr);
-        _isOpen = true;
     }
 
     Socket::~Socket() noexcept {
@@ -95,5 +95,29 @@ namespace Network {
         } catch(std::exception e) {
             std::cout << "failed to close socket:\n" << e.what() << std::endl;
         }
+    }
+
+    void Socket::send(const std::string& buffer) {
+        int result = ::send(_sock, &buffer[0], buffer.size(), 0);
+        if(result == -1)
+            throw NetworkError("failed to send");
+    }
+
+    std::string Socket::recv() const {
+        std::string response;
+        response.reserve(2048);
+
+        int bytes = 0;
+        do {
+            std::vector<char> buffer(2048);
+
+            bytes = ::recv(_sock, &buffer[0], buffer.capacity(), 0);
+            if(bytes > 0)
+                response += std::string(buffer.begin(), buffer.begin() + bytes);
+            else if (bytes < 0)
+                throw NetworkError("Error recieving data");
+        } while(bytes > 0);
+
+        return response;
     }
 }

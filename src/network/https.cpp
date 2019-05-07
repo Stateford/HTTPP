@@ -6,7 +6,6 @@
 namespace Network {
 
     void Https::request() {
-
         _bio = BIO_new_ssl_connect(_ctx);
 
         BIO_get_ssl(_bio, &_ssl);
