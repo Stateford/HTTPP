@@ -1,38 +1,36 @@
 #include "socket.h"
-#include "errors.h"
+#include "../errors.h"
 #include <vector>
 
 
 namespace Network {
 
-    Socket::Socket(const std::string &hostname, const std::string &port) {
-        _hints.ai_family = AF_INET;
-        _hints.ai_socktype = SOCK_STREAM;
-        _hints.ai_protocol = IPPROTO_TCP;
-        this->hostname = hostname;
-        this->port = port;
+    Socket::Socket() {
+        this->_sock_type = TCP;
+    }
+
+    Socket::Socket(SOCK_TYPE type) : BaseSocket() {
+        if(type < TCP || type > UDP)
+            throw NetworkError("Invalid socket type");
+        this->_sock_type = type;
     }
 
     // copy constructor
     Socket::Socket(const Socket& other) {
         this->_sock = other._sock;
         this->_hints = other._hints;
+        this->_sock_type = other._sock_type;
         this->_result = new addrinfo;
         *this->_result = *other._result;
-
-        this->hostname = other.hostname;
-        this->port = other.port;
     }
 
     // move constructor
     Socket::Socket(Socket&& other) {
         this->_sock = other._sock;
         this->_hints = other._hints;
+        this->_sock_type = other._sock_type;
         this->_result = other._result;
         other._result = nullptr;
-
-        this->hostname = other.hostname;
-        this->port = other.port;
     }
 
     // copy assignment
@@ -42,14 +40,12 @@ namespace Network {
 
         this->_sock = other._sock;
         this->_hints = other._hints;
+        this->_sock_type = other._sock_type;
 
         if(this->_result != nullptr)
             freeaddrinfo(this->_result);
         this->_result = new addrinfo;
         *this->_result = *other._result;
-
-        this->hostname = other.hostname;
-        this->port = other.port;
 
         return *this;
     }
@@ -65,15 +61,30 @@ namespace Network {
         this->_sock = other._sock;
         this->_hints = other._hints;
         this->_result = other._result;
+        this->_sock_type = other._sock_type;
         other._result = nullptr;
-
-        this->hostname = other.hostname;
-        this->port = other.port;
 
         return *this;
     }
 
-    void Socket::connectSocket() {
+    void Socket::setHints() {
+        _hints.ai_family = AF_INET;
+        switch(_sock_type) {
+            case TCP:
+                _hints.ai_socktype = SOCK_STREAM;
+                _hints.ai_protocol = IPPROTO_TCP;
+                break;
+            case UDP:
+                _hints.ai_socktype = SOCK_DGRAM;
+                _hints.ai_protocol = IPPROTO_UDP;
+                break;
+            default:
+                throw NetworkError("Invalid sock type");
+        }
+    }
+
+    void Socket::connectSocket(const std::string& hostname, const std::string& port) {
+        setHints();
         int result = getaddrinfo(hostname.c_str(), port.c_str(), &_hints, &_result);
         if(result == -1)
             throw NetworkError("Couldn't resolve DNS");
@@ -87,6 +98,10 @@ namespace Network {
         freeaddrinfo(ptr);
     }
 
+    void Socket::closeSocket() {
+        ::close(_sock);
+    }
+
     Socket::~Socket() noexcept {
         try {
             if(_result != nullptr)
@@ -97,7 +112,7 @@ namespace Network {
         }
     }
 
-    void Socket::send(const std::string& buffer) {
+    void Socket::send(const std::string& buffer) const {
         int result = ::send(_sock, &buffer[0], buffer.size(), 0);
         if(result == -1)
             throw NetworkError("failed to send");
@@ -119,5 +134,9 @@ namespace Network {
         } while(bytes > 0);
 
         return response;
+    }
+
+    void Socket::closeSocket(Socket& sock) {
+        close(sock._sock);
     }
 }

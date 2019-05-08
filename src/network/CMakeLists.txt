@@ -4,8 +4,9 @@ set (NETWORK_SOURCE
     https.cpp
     request.cpp
     response.cpp
-    socket.cpp
     url.cpp
 )
+
+add_subdirectory(socket)
 
 add_library(network ${NETWORK_SOURCE})

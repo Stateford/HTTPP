@@ -25,3 +25,4 @@ add_executable(${PROJECT_NAME} ${HTTP_SOURCE_FILES})
 
 target_link_libraries(${PROJECT_NAME} OpenSSL::SSL)
 target_link_libraries(${PROJECT_NAME} network)
+target_link_libraries(${PROJECT_NAME} socket)

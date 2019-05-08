@@ -1,4 +1,5 @@
 #pragma once
+#include "baseSocket.h"
 #include <iostream>
 #include <string>
 #include <unistd.h>
@@ -10,29 +11,32 @@
 
 namespace Network {
 
-    class Socket {
+    class Socket : public BaseSocket {
         private:
             int _sock;
             addrinfo _hints;
             addrinfo* _result;
 
-            std::string hostname;
-            std::string port;
+            SOCK_TYPE _sock_type;
+
+            void setHints();
 
         public:
-            Socket(const std::string&, const std::string&);
+            Socket();
+            Socket(SOCK_TYPE);
             Socket(const Socket&);  // copy constructor
             Socket(Socket&&); // move constructor
 
             Socket& operator=(const Socket&);   // copy assignment
             Socket& operator=(Socket&&); // move assignment
-            ~Socket() noexcept;
+            ~Socket() noexcept override;
 
-            void connectSocket();
-            static void closeSocket(Socket*);
+            void connectSocket(const std::string&, const std::string&) override;
+            void closeSocket() override;
+            static void closeSocket(Socket&);
 
             int getSocket() { return _sock; }
-            void send(const std::string&);
-            std::string recv() const;
+            void send(const std::string&) const override;
+            std::string recv() const override;
     };
 }

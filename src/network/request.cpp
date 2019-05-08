@@ -6,7 +6,7 @@ namespace Network {
 
     Request::Request(const std::string& url) {
         _url = std::make_shared<URL>(url);
-        _socket = std::make_shared<Socket>(_url->getHost(), _url->getPortString());
+        _socket = std::make_shared<Socket>(SOCK_TYPE::TCP);
         _headers["Host"] = _url->getHost();
         _method = GET;
     }
