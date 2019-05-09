@@ -96,10 +96,12 @@ namespace Network {
             connect(_sock, ptr->ai_addr, (int)ptr->ai_addrlen);
         }
         freeaddrinfo(ptr);
+        _socketOpen = true;
     }
 
     void Socket::closeSocket() {
         ::close(_sock);
+        _socketOpen = false;
     }
 
     Socket::~Socket() noexcept {

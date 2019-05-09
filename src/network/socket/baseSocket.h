@@ -10,6 +10,9 @@ namespace Network {
     };
 
     class BaseSocket {
+        protected:
+            bool _socketOpen = false;
+
         public:
             BaseSocket() = default;
             BaseSocket(const BaseSocket&) = default;
@@ -17,6 +20,9 @@ namespace Network {
 
             BaseSocket& operator=(const BaseSocket&) = default;
             BaseSocket& operator=(BaseSocket&&) = default;
+
+            bool isOpen() const { return _socketOpen; }
+
             virtual ~BaseSocket() {};
 
             virtual void connectSocket(const std::string&, const std::string&) = 0;

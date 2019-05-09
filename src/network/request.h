@@ -1,6 +1,7 @@
 #pragma once
 #include "url.h"
 #include "socket/socket.h"
+#include "socket/secure.h"
 #include "header.h"
 #include "response.h"
 #include <string>
@@ -11,6 +12,7 @@ namespace Network {
     class Request {
         protected:
             std::shared_ptr<Socket> _socket;
+            std::shared_ptr<SecureSocket> _secureSocket;
             std::shared_ptr<URL> _url;
             enum Method {
                 GET,
@@ -39,11 +41,14 @@ namespace Network {
             Request& operator=(const Request&); // copy assignment
             Request& operator=(Request&&); // move assignment
 
-            virtual ~Request() = 0;
-            virtual void request() = 0;
+            ~Request();
+            void request();
+            void setMethod(Method);
 
             void setBody(const std::string&);
 
             const Response getResponse() const { return _response; };
+
+            static Response get(const std::string&);
     };
 }

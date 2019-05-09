@@ -24,5 +24,6 @@ namespace Network {
             const std::string getPath() const { return _path; };
             unsigned short getPort() const { return _protocol == HTTP ? 80 : 443; }
             const std::string getPortString() const { return _protocol == HTTP ? "80" : "443"; }
+            const Protocol getProtocol() const { return _protocol; }
     };
 }

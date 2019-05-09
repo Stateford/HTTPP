@@ -34,6 +34,10 @@ namespace Network {
         }
     }
 
+    bool Header::contains(const std::string& key) const {
+        return _headers.find(key) != _headers.end();
+    }
+
     std::string& Header::operator[](const std::string& key) {
         return _headers[key];
     }

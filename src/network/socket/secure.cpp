@@ -70,6 +70,7 @@ namespace Network {
     }
 
     void SecureSocket::connectSocket(const std::string& hostname, const std::string& port) {
+        _socketOpen = true;
         _bio = BIO_new_ssl_connect(_ctx);
 
         BIO_get_ssl(_bio, &_ssl);
@@ -83,6 +84,10 @@ namespace Network {
             const std::string errorMessage = getErrorMessage();
             throw NetworkError(errorMessage);
         }
+    }
+
+    void SecureSocket::closeSocket() {
+        // TODO: set close socket
     }
 
     void SecureSocket::send(const std::string& message) const {

@@ -27,6 +27,8 @@ namespace Network {
             bool isEmpty() const { return _headers.empty(); }
             void insert(const std::string&, const std::string&);
 
+            bool contains(const std::string&) const;
+
             header_iterator begin() { return _headers.begin(); }
             header_iterator end() { return _headers.end(); }
             header_const_iterator begin() const { return _headers.begin(); }

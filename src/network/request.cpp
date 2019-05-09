@@ -7,6 +7,7 @@ namespace Network {
     Request::Request(const std::string& url) {
         _url = std::make_shared<URL>(url);
         _socket = std::make_shared<Socket>(SOCK_TYPE::TCP);
+        _secureSocket = std::make_shared<SecureSocket>(SOCK_TYPE::TCP);
         _headers["Host"] = _url->getHost();
         _method = GET;
     }
@@ -14,6 +15,7 @@ namespace Network {
     // copy constructor
     Request::Request(const Request& other) {
         this->_socket = other._socket;
+        this->_secureSocket = other._secureSocket;
         this->_url = other._url;
         this->_headers = other._headers;
         this->_method = other._method;
@@ -24,6 +26,7 @@ namespace Network {
     // move constructor
     Request::Request(Request&& other) {
         this->_socket = std::move(other._socket);
+        this->_secureSocket = std::move(other._secureSocket);
         this->_url = std::move(other._url);
         this->_headers = other._headers;
         this->_method = other._method;
@@ -38,6 +41,7 @@ namespace Network {
             return *this;
 
         this->_socket = other._socket;
+        this->_secureSocket = other._secureSocket;
         this->_url = other._url;
         this->_headers = other._headers;
         this->_method = other._method;
@@ -53,6 +57,7 @@ namespace Network {
             return *this;
 
         this->_socket = std::move(other._socket);
+        this->_secureSocket = std::move(other._secureSocket);
         this->_url = std::move(other._url);
         this->_headers = other._headers;
         this->_method = other._method;
@@ -91,6 +96,27 @@ namespace Network {
         }
     }
 
+    void Request::request() {
+        std::shared_ptr<BaseSocket> sock;
+        if(_url->getProtocol() == HTTPS)
+            sock = _secureSocket;
+        else
+            sock = _socket;
+        sock->connectSocket(_url->getHost(), _url->getPortString());
+        std::string responseBuffer;
+        responseBuffer.reserve(10'000);
+
+        const std::string httpPacket = createPacket();
+        _socket->send(httpPacket);
+
+        const std::string response = _socket->recv();
+        
+        if(sock->isOpen() && (!_headers.contains("Connection") || _headers["Connection"] == "Close"))
+            sock->closeSocket();
+
+        _response.parseResponse(response);
+    }
+
     const std::string Request::createPacket() { 
         std::string temp;
         temp.reserve(400);
@@ -114,5 +140,16 @@ namespace Network {
             temp += _body + "\r\n\r\n";
 
         return temp;
+    }
+
+    void Request::setMethod(Method method) {
+        _method = method;
+    }
+
+    Response Request::get(const std::string& hostname) {
+        auto req = Request(hostname);
+        req.request();
+
+        return req.getResponse();
     }
 }
