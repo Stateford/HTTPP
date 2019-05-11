@@ -5,18 +5,18 @@
 
 namespace Network {
 
-    Socket::Socket() {
+    Socket::Socket() : BaseSocket() {
         this->_sock_type = TCP;
     }
 
-    Socket::Socket(SOCK_TYPE type) : BaseSocket() {
+    Socket::Socket(const SOCK_TYPE type) : BaseSocket() {
         if(type < TCP || type > UDP)
             throw NetworkError("Invalid socket type");
         this->_sock_type = type;
     }
 
     // copy constructor
-    Socket::Socket(const Socket& other) {
+    Socket::Socket(const Socket& other) : BaseSocket() {
         this->_sock = other._sock;
         this->_hints = other._hints;
         this->_sock_type = other._sock_type;
@@ -25,7 +25,7 @@ namespace Network {
     }
 
     // move constructor
-    Socket::Socket(Socket&& other) {
+    Socket::Socket(Socket&& other) : BaseSocket() {
         this->_sock = other._sock;
         this->_hints = other._hints;
         this->_sock_type = other._sock_type;

@@ -1,14 +1,12 @@
 #include <iostream>
 #include "network/errors.h"
-#include "network/http.h"
-#include "network/https.h"
+#include "network/request.h"
 
 
 int main()
 {
     try {
-        //Network::Https request("drudgereport.com");
-        Network::Http request("winamp.com");
+        Network::Request request("winamp.com");
         request.request();
         auto response = request.getResponse();
         std::cout << response.getContent() << std::endl;

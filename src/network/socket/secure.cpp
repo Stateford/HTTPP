@@ -1,6 +1,5 @@
 #include "secure.h"
 #include "../errors.h"
-#include <openssl/bio.h>
 #include <vector>
 #include <algorithm>
 #include <cstring>
@@ -8,13 +7,13 @@
 
 namespace Network {
 
-    SecureSocket::SecureSocket() {
+    SecureSocket::SecureSocket() : BaseSocket() {
         SSL_load_error_strings();
         ERR_load_crypto_strings();
         _ctx = SSL_CTX_new(SSLv23_client_method());
     }
 
-    SecureSocket::SecureSocket(const SecureSocket& other) {
+    SecureSocket::SecureSocket(const SecureSocket& other) : BaseSocket() {
         this->_ssl = other._ssl;
         this->_ctx = other._ctx;
         if(this->_bio != nullptr || this->_bio != NULL)
@@ -23,7 +22,7 @@ namespace Network {
         std::memcpy(this->_bio, &other._bio, sizeof(&this->_bio));
     }
 
-    SecureSocket::SecureSocket(SecureSocket&& other) {
+    SecureSocket::SecureSocket(SecureSocket&& other) : BaseSocket() {
         this->_ssl = other._ssl;
         this->_ctx = other._ctx;
 

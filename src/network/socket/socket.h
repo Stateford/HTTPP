@@ -23,7 +23,7 @@ namespace Network {
 
         public:
             Socket();
-            Socket(SOCK_TYPE);
+            Socket(const SOCK_TYPE);
             Socket(const Socket&);  // copy constructor
             Socket(Socket&&); // move constructor
 
