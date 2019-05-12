@@ -7,4 +7,19 @@
 release/
 debug/
 
+# ansible files
 *.retry
+
+# CMake files
+*.CMake
+CMakeCache.txt
+CMakeFiles/
+
+# Windows build files
+*.sln
+*.vcxproj
+*.vcxproj.*
+win32/
+*.dir/
+.vs/
+.vscode/
