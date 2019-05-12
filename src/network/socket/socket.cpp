@@ -7,12 +7,18 @@ namespace Network {
 
     Socket::Socket() : BaseSocket() {
         this->_sock_type = TCP;
+#ifdef _WIN32
+        windowsSetup();
+#endif
     }
 
     Socket::Socket(const SOCK_TYPE type) : BaseSocket() {
         if(type < TCP || type > UDP)
             throw NetworkError("Invalid socket type");
         this->_sock_type = type;
+#ifdef _WIN32
+        windowsSetup();
+#endif
     }
 
     // copy constructor
@@ -112,6 +118,9 @@ namespace Network {
         } catch(std::exception e) {
             std::cout << "failed to close socket:\n" << e.what() << std::endl;
         }
+#ifdef _WIN32
+        windowsCleanup();
+#endif
     }
 
     void Socket::send(const std::string& buffer) const {
@@ -141,4 +150,18 @@ namespace Network {
     void Socket::closeSocket(Socket& sock) {
         close(sock._sock);
     }
+
+#ifdef _WIN32
+    void Socket::windowsSetup() const {
+        WSADATA data;
+        const int result = WSAStartup(MAKEWORD(2,2), &data);
+        if(result != 0)
+            throw NetworkError("Could not startup winsock library");
+    }
+
+    void Socket::windowsCleanup() const {
+        WSACleanup();
+    }
+
+#endif
 }

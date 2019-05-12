@@ -5,21 +5,34 @@
 #include <unistd.h>
 #include <sys/types.h>
 #include <sys/socket.h>
+
+#ifdef __linux__
 #include <netdb.h>
 #include <memory>
+typedef int sock;
+#elif _WIN32
+#include <winsock2.h>
+#pragma comment(lib, "ws2_32.lib") // include winsock lib
+typedef SOCKET sock;
+#endif
+
 
 
 namespace Network {
 
     class Socket : public BaseSocket {
         private:
-            int _sock;
+            sock _sock;
             addrinfo _hints;
             addrinfo* _result;
 
             SOCK_TYPE _sock_type;
 
             void setHints();
+#ifdef _WIN32
+            void windowsSetup() const;
+            void windowsCleanup() const;
+#endif
 
         public:
             Socket();
