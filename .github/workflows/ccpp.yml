@@ -10,7 +10,7 @@ jobs:
     steps:
     - uses: actions/checkout@v1
     - name: deps
-      run: apt-get install cmake openssl
+      run: sudo apt-get install cmake openssl
     - name: cmake
       run: mkdir debug && cd debug && cmake ..
     - name: make
