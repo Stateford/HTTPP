@@ -1,12 +1,10 @@
 - hosts: localhost
   connection: local
-  sudo: yes
+  become: yes
   tasks:
     - name: CMAKE
-      become: true
       apt:
           name: cmake
     - name: OPENSSL
-      become: true
       apt:
           name: libssl-dev

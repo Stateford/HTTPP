@@ -1,6 +1,8 @@
-#include <iostream>
 #include "network/errors.h"
 #include "network/request.h"
+#include "network/cookies//cookie.h"
+#include <iostream>
+#include <string>
 
 
 int main()

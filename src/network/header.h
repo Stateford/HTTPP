@@ -3,6 +3,7 @@
 #include <string>
 
 namespace Network {
+
     enum MimeType {
         PLAIN,
         CSV,

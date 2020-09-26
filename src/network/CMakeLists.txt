@@ -6,6 +6,8 @@ set (NETWORK_SOURCE
 )
 
 add_subdirectory(socket)
+add_subdirectory(cookies)
 
 add_library(network ${NETWORK_SOURCE})
 target_link_libraries(network socket)
+target_link_libraries(network cookies)
